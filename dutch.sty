@@ -1,0 +1,451 @@
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ██████╗░██╗░░░██╗████████╗░█████╗░██╗░░██╗░░░░░░░░░░██████╗████████╗██╗░░░██╗
+% ██╔══██╗██║░░░██║╚══██╔══╝██╔══██╗██║░░██║░░░░░░░░░██╔════╝╚══██╔══╝╚██╗░██╔╝
+% ██║░░██║██║░░░██║░░░██║░░░██║░░╚═╝███████║░░░░░░░░░╚█████╗░░░░██║░░░░╚████╔╝░
+% ██║░░██║██║░░░██║░░░██║░░░██║░░██╗██╔══██║░░░░░░░░░░╚═══██╗░░░██║░░░░░╚██╔╝░░
+% ██████╔╝╚██████╔╝░░░██║░░░╚█████╔╝██║░░██║░░░██╗░░░██████╔╝░░░██║░░░░░░██║░░░
+% ╚═════╝░░╚═════╝░░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═════╝░░░░╚═╝░░░░░░╚═╝░░░
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%Information
+% style file for LaTeX notetaking
+% original version written by @vEnhance [https://web.evanchen.cc/latex-style-guide.html].
+% several modifications made @dutchhansen in Dec. 2023, with an up-to-date distribution of TeXLive.
+
+%%How to use
+% use separate macros.tex file for macros
+% \documentclass[10pt]{scrartcl}
+% \usepackage{dutch}, with options as needed
+% proceed as normal
+
+\ProvidesPackage{dutch}
+%%fakesection Argument processing
+% Default Arguments
+% We include "dutch" in all of these to make sure
+% that they don't collide with anything in external packages
+\newif\ifdutchformal\dutchformaltrue
+\newif\ifdutchhdr\dutchhdrtrue
+\newif\ifdutchhref\dutchhreftrue
+\newif\ifdutchsetup\dutchsetuptrue
+\newif\ifdutchthm\dutchthmtrue
+\newif\ifdutchsecthm\dutchsecthmfalse
+\newif\ifdutchht\dutchhtfalse
+\newif\ifdutchpkg\dutchpkgtrue
+\newif\ifdutchpdf\dutchpdftrue
+\newif\ifdutchauthor\dutchauthortrue
+\newif\ifdutchmdthm\dutchmdthmfalse
+\newif\ifdutchpatchasy\dutchpatchasyfalse
+\newif\ifdutchhints\dutchhintsfalse
+\newif\ifdutchcolorsec\dutchcolorsecfalse
+\newif\ifdutchtitlemark\dutchtitlemarktrue
+\newif\ifdutchvonenabled\dutchvonenabledfalse
+
+%Receive Arguments
+\DeclareOption{informal}{\dutchsecthmtrue\dutchmdthmtrue\dutchcolorsectrue} % long docs
+
+\DeclareOption{formal}{\dutchformaltrue}
+\DeclareOption{noformal}{\dutchformalfalse}
+\DeclareOption{hdr}{\dutchhdrtrue}
+\DeclareOption{nohdr}{\dutchhdrfalse}
+\DeclareOption{href}{\dutchhreftrue}
+\DeclareOption{nohref}{\dutchhreffalse}
+
+\DeclareOption{nosetup}{\dutchsetupfalse}
+\DeclareOption{thm}{\dutchthmtrue}
+\DeclareOption{nothm}{\dutchthmfalse}
+\DeclareOption{secthm}{\dutchsecthmtrue}
+\DeclareOption{nosecthm}{\dutchsecthmfalse}
+
+\DeclareOption{ht}{\dutchhttrue}
+\DeclareOption{nopdf}{\dutchpdffalse}
+\DeclareOption{nopkg}{\dutchpkgfalse}
+\DeclareOption{noauthor}{\dutchauthorfalse}
+\DeclareOption{titlemark}{\dutchtitlemarktrue} % Sets title in ohead, not \rightmark
+\DeclareOption{sectionmark}{\dutchtitlemarkfalse} % Uses \rightmark not title in ohead
+
+\DeclareOption{mdthm}{\dutchmdthmtrue}
+\DeclareOption{nomdthm}{\dutchmdthmfalse}
+\DeclareOption{colorsec}{\dutchcolorsectrue}
+\DeclareOption{nocolorsec}{\dutchcolorsecfalse}
+
+\DeclareOption{patchasy}{\dutchpatchasytrue}
+\DeclareOption{hints}{\dutchhintstrue}
+\DeclareOption{von}{\dutchvonenabledtrue}
+
+\ProcessOptions\relax
+
+% if packages not loaded, turn off mdthm and asy
+\ifdutchpkg\else\dutchmdthmfalse\fi
+
+% If no setup, turn off theorems
+\ifdutchsetup\else\dutchthmfalse\fi
+
+%%Small commands
+\usepackage{amsmath,amssymb}
+\usepackage{xpatch}
+\usepackage{iftex}
+\ifdutchpkg
+  \usepackage[minimal]{yhmath}
+  \usepackage{derivative}
+\fi
+
+%Convenient Environments
+\newenvironment{soln}{\begin{proof}[Solution]}{\end{proof}}
+\newenvironment{parlist}{\begin{inparaenum}[(i)]}{\end{inparaenum}}
+\newenvironment{gobble}{\setbox\z@\vbox\bgroup}{\egroup}
+
+%%fakesection BEGIN MAIN SETUP
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ifdutchsetup
+  %%fakesection Set up author and date
+  \ifdutchauthor
+    \title{} % empty title to avoid crashes
+    \author{Dutch Hansen}
+    \date{\today}
+  \fi
+
+  %%fakesection Hyperref
+  \ifdutchpkg
+    \PassOptionsToPackage{usenames,svgnames,dvipsnames,table}{xcolor}
+    \usepackage{xcolor}
+    \ifdutchhref
+      \usepackage[colorlinks=true,pdfusetitle]{hyperref}
+      \hypersetup{pdfkeywords={dutch.sty}}
+      \hypersetup{urlcolor=RubineRed,linkcolor=RoyalBlue,citecolor=ForestGreen}
+    \fi
+    \usepackage[nameinlink]{cleveref}
+  \fi
+
+  %%fakesection New theorem styles
+  \ifdutchthm
+    \usepackage{amsthm}
+    \usepackage{thmtools}
+  \fi
+  \ifdutchmdthm
+    \ifdutchthm
+      %% theorem packages loaded already
+    \else
+      \usepackage{amsthm}
+      \usepackage{thmtools}
+    \fi
+    \usepackage[framemethod=TikZ]{mdframed}
+    \usetikzlibrary{shadows}
+    % https://tex.stackexchange.com/a/292090/76888
+    % https://github.com/marcodaniel/mdframed/issues/12
+    \xpatchcmd{\endmdframed}
+      {\aftergroup\endmdf@trivlist\color@endgroup}
+      {\endmdf@trivlist\color@endgroup\@doendpe}
+      {}{}
+
+    \mdfdefinestyle{mdbluebox}{%
+      roundcorner=10pt,
+      linewidth=1pt,
+      skipabove=12pt,
+      innerbottommargin=9pt,
+      skipbelow=2pt,
+      linecolor=blue,
+      nobreak=true,
+      backgroundcolor=TealBlue!5,
+    }
+    \declaretheoremstyle[
+      headfont=\sffamily\bfseries\color{MidnightBlue},
+      mdframed={style=mdbluebox},
+      headpunct={\\[3pt]},
+      postheadspace={0pt}
+    ]{thmbluebox}
+
+    \mdfdefinestyle{mdredbox}{%
+      linewidth=0.5pt,
+      skipabove=12pt,
+      frametitleaboveskip=5pt,
+      frametitlebelowskip=0pt,
+      skipbelow=2pt,
+      frametitlefont=\bfseries,
+      innertopmargin=4pt,
+      innerbottommargin=8pt,
+      nobreak=true,
+      backgroundcolor=Salmon!5,
+      linecolor=RawSienna,
+    }
+    \declaretheoremstyle[
+      headfont=\bfseries\color{RawSienna},
+      mdframed={style=mdredbox},
+      headpunct={\\[3pt]},
+      postheadspace={0pt},
+    ]{thmredbox}
+
+    \mdfdefinestyle{mdgreenbox}{%
+      skipabove=8pt,
+      skipbelow=0pt,
+      linewidth=2pt,
+      rightline=false,
+      leftline=true,
+      topline=false,
+      bottomline=false,
+      linecolor=ForestGreen,
+      backgroundcolor=ForestGreen!5,
+    }
+    \declaretheoremstyle[
+      headfont=\bfseries\sffamily\color{ForestGreen!70!black},
+      bodyfont=\normalfont,
+      spaceabove=2pt,
+      spacebelow=1pt,
+      mdframed={style=mdgreenbox},
+      headpunct={ --- },
+    ]{thmgreenbox}
+
+    \mdfdefinestyle{mdblackbox}{%
+      skipabove=8pt,
+      linewidth=3pt,
+      rightline=false,
+      leftline=true,
+      topline=false,
+      bottomline=false,
+      linecolor=black,
+      backgroundcolor=RedViolet!5!gray!5,
+    }
+    \declaretheoremstyle[
+      headfont=\bfseries,
+      bodyfont=\normalfont\small,
+      spaceabove=0pt,
+      spacebelow=0pt,
+      mdframed={style=mdblackbox}
+    ]{thmblackbox}
+
+    \mdfdefinestyle{mdpurplebox}{%
+      roundcorner=10pt,
+      linewidth=1pt,
+      skipabove=12pt,
+      skipbelow=12pt,
+      innertopmargin=9pt,
+      innerbottommargin=9pt,
+      linecolor=black,
+      nobreak=true,
+      backgroundcolor=Orchid!10,
+      shadow=true,
+      shadowsize=6pt,
+      shadowcolor=black!30,
+      frametitleaboveskip=8pt,
+      frametitlebelowskip=8pt,
+      frametitlebackgroundcolor=Violet!50!black,
+      frametitlefont=\bfseries\sffamily\color{white},
+      frametitlerule=true,
+    }
+    \newcommand{\listhack}{$\empty$\vspace{-2em}}
+  \fi
+
+  %%fakesection Theorem setup
+  \ifdutchthm
+    \theoremstyle{definition}
+    %Branching here: the option secthm changes theorems to be labelled by section
+    \ifdutchmdthm
+      \ifdutchsecthm
+        \declaretheorem[style=thmbluebox,name=Theorem,numberwithin=section]{theorem}
+      \else
+        \declaretheorem[style=thmbluebox,name=Theorem]{theorem}
+      \fi
+      \declaretheorem[style=thmbluebox,name=Lemma,sibling=theorem]{lemma}
+      \declaretheorem[style=thmbluebox,name=Proposition,sibling=theorem]{proposition}
+      \declaretheorem[style=thmbluebox,name=Corollary,sibling=theorem]{corollary}
+      \declaretheorem[style=thmbluebox,name=Assumption,sibling=theorem]{assume}
+      \declaretheorem[style=thmbluebox,name=Theorem,numbered=no]{theorem*}
+      \declaretheorem[style=thmbluebox,name=Lemma,numbered=no]{lemma*}
+      \declaretheorem[style=thmbluebox,name=Proposition,numbered=no]{proposition*}
+      \declaretheorem[style=thmbluebox,name=Corollary,numbered=no]{corollary*}
+      \declaretheorem[style=thmbluebox,name=Assumption,numbered=no]{assume*}
+    \else
+      \ifdutchsecthm
+        \declaretheorem[name=Theorem,numberwithin=section]{theorem}
+      \else
+        \declaretheorem[name=Theorem]{theorem}
+      \fi
+      \declaretheorem[name=Lemma,sibling=theorem]{lemma}
+      \declaretheorem[name=Proposition,sibling=theorem]{proposition}
+      \declaretheorem[name=Corollary,sibling=theorem]{corollary}
+      \declaretheorem[name=Assumption,sibling=theorem]{assume}
+      \declaretheorem[name=Theorem,numbered=no]{theorem*}
+      \declaretheorem[name=Lemma,numbered=no]{lemma*}
+      \declaretheorem[name=Proposition,numbered=no]{proposition*}
+      \declaretheorem[name=Corollary,numbered=no]{corollary*}
+      \declaretheorem[name=Assumption,numbered=no]{assume*}
+    \fi
+
+    \ifdutchmdthm
+      \declaretheorem[style=thmgreenbox,name=Algorithm,sibling=theorem]{algorithm}
+      \declaretheorem[style=thmgreenbox,name=Algorithm,numbered=no]{algorithm*}
+      \declaretheorem[style=thmgreenbox,name=Claim,sibling=theorem]{claim}
+      \declaretheorem[style=thmgreenbox,name=Claim,numbered=no]{claim*}
+    \else
+      \declaretheorem[name=Algorithm,sibling=theorem]{algorithm}
+      \declaretheorem[name=Algorithm,numbered=no]{algorithm*}
+      \declaretheorem[name=Claim,sibling=theorem]{claim}
+      \declaretheorem[name=Claim,numbered=no]{claim*}
+    \fi
+
+    \ifdutchmdthm
+      \declaretheorem[style=thmredbox,name=Example,sibling=theorem]{example}
+      \declaretheorem[style=thmredbox,name=Example,numbered=no]{example*}
+    \else
+      \declaretheorem[name=Example,sibling=theorem]{example}
+      \declaretheorem[name=Example,numbered=no]{example*}
+    \fi
+
+    % Remark-style theorems
+    \ifdutchmdthm
+      \declaretheorem[style=thmblackbox,name=Remark,sibling=theorem]{remark}
+      \declaretheorem[style=thmblackbox,name=Remark,numbered=no]{remark*}
+    \else
+      \declaretheorem[name=Remark,sibling=theorem]{remark}
+      \declaretheorem[name=Remark,numbered=no]{remark*}
+    \fi
+
+    \ifdutchmdthm
+      \declaretheoremstyle[
+        headfont=\color{blue!40!black}\normalfont\bfseries,
+        spaceabove=8pt,
+        spacebelow=8pt,
+        bodyfont=\normalfont
+      ]{basehead}
+    \else
+      \declaretheoremstyle[spaceabove=6pt,spacebelow=6pt]{basehead}
+    \fi
+
+    \declaretheorem[style=basehead,name=Answer,sibling=theorem]{answer}
+    \declaretheorem[style=basehead,name=Answer,numbered=no]{answer*}
+    \declaretheorem[style=basehead,name=Conjecture,sibling=theorem]{conjecture}
+    \declaretheorem[style=basehead,name=Conjecture,numbered=no]{conjecture*}
+    \declaretheorem[style=basehead,name=Definition,sibling=theorem]{definition}
+    \declaretheorem[style=basehead,name=Definition,numbered=no]{definition*}
+    \declaretheorem[style=basehead,name=Exercise,sibling=theorem]{exercise}
+    \declaretheorem[style=basehead,name=Exercise,numbered=no]{exercise*}
+    \declaretheorem[style=basehead,name=Fact,sibling=theorem]{fact}
+    \declaretheorem[style=basehead,name=Fact,numbered=no]{fact*}
+    \declaretheorem[style=basehead,name=Problem,sibling=theorem]{problem}
+    \declaretheorem[style=basehead,name=Problem,numbered=no]{problem*}
+    \declaretheorem[style=basehead,name=Question,sibling=theorem]{ques}
+    \declaretheorem[style=basehead,name=Question,numbered=no]{ques*}
+
+    \ifdutchpkg
+      \Crefname{answer}{Answer}{Answers}
+      \Crefname{assume}{Assumption}{Assumptions}
+      \Crefname{claim}{Claim}{Claims}
+      \Crefname{conjecture}{Conjecture}{Conjectures}
+      \Crefname{exercise}{Exercise}{Exercises}
+      \Crefname{fact}{Fact}{Facts}
+      \Crefname{problem}{Problem}{Problems}
+      \Crefname{ques}{Question}{Questions}
+    \fi
+  \fi
+
+  %%fakesection formal section and chapter heads
+  \ifdutchcolorsec
+    \@ifundefined{KOMAClassName}{}{
+      \@ifundefined{chapter}{}{
+        \addtokomafont{partprefix}{\rmfamily}
+        \renewcommand*{\partformat}{\color{purple}
+          \scalebox{2.5}{\thepart}\enlargethispage{2em}}
+        \addtokomafont{chapterprefix}{\raggedleft}
+        \RedeclareSectionCommand[beforeskip=0.5em]{chapter}
+        \renewcommand*{\chapterformat}{\mbox{%
+          \scalebox{1.5}{\chapappifchapterprefix{\nobreakspace}}%
+          \scalebox{2.718}{\color{purple}\thechapter}\enskip}}
+      }
+      \renewcommand*{\sectionformat}%
+        {\color{purple}\S\thesection\enskip}
+      \renewcommand*{\subsectionformat}%
+        {\color{purple}\S\thesubsection\enskip}
+      \renewcommand*{\subsubsectionformat}%
+        {\color{purple}\S\thesubsubsection\enskip}
+      \addtokomafont{paragraph}{\color{orange!35!black}\P\ }
+      \KOMAoptions{numbers=noenddot}
+    }
+  \fi
+
+  %%fakesection \maketitle configuration
+  \@ifundefined{KOMAClassName}%
+    {} % do nothing outside KOMA class
+    {% If KOMA exists. . .
+    \addtokomafont{subtitle}{\Large}
+    \setkomafont{author}{\Large\scshape}
+    \setkomafont{date}{\Large\normalsize}
+    }
+  \providecommand{\thetitle}{\@title}
+  \providecommand{\theauthor}{\@author}
+  \providecommand{\thedate}{\@date}
+
+  %%fakesection Page setup
+  \ifdutchformal
+    \@ifundefined{KOMAClassName}
+    {
+      \usepackage{formalhdr}
+      \setlength{\headheight}{0.75in}
+      \setlength{\oddsidemargin}{0in}
+      \setlength{\evensidemargin}{0in}
+      \setlength{\voffset}{-1.0in}
+      \setlength{\headsep}{10pt}
+      \setlength{\textwidth}{6.5in}
+      \setlength{\headwidth}{6.5in}
+      \setlength{\textheight}{8.75in}
+      \setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+      \setlength{\footskip}{0.3in}
+      \ifdutchhdr
+        \renewcommand{\headrulewidth}{0.5pt}
+        \renewcommand{\footrulewidth}{0.0pt}
+        \pagestyle{formal}
+        \lhead{Dutch Hansen}
+        \chead{}
+        \rhead{\nouppercase{\leftmark}}
+        \lfoot{}
+        \cfoot{\thepage}
+        \rfoot{}
+      \fi
+    }
+    {
+      \usepackage[headsepline]{scrlayer-scrpage}
+      \renewcommand{\headfont}{}
+      \addtolength{\textheight}{3.14cm}
+      \setlength{\footskip}{0.5in}
+      \setlength{\headsep}{10pt}
+      \ihead{\footnotesize\textbf{\theauthor} --- \thedate}
+      \automark{section}
+      \chead{}
+      \ohead{\footnotesize\textbf{\thetitle}}
+      \cfoot{\pagemark}
+    }
+  \fi
+
+  %%fakesection Unicode
+  \ifdutchpkg
+    \ifluatex
+      \usepackage{fontspec}
+      % https://tex.stackexchange.com/a/572220/76888
+      \directlua{luaotfload.add_fallback
+        ("dutchs_fallbacks",
+          {
+            "NotoColorEmoji:mode=harf;",
+            "Source Han Sans TW:style=Regular;",
+            "Noto Serif CJK SC:style=Regular;",
+          }
+        )}
+      \setmainfont{lmroman10-regular}[
+        BoldFont=lmroman10-bold,
+        ItalicFont=lmroman10-italic,
+        BoldItalicFont=lmroman10-bolditalic,
+        SlantedFont=lmromanslant10-regular,
+        BoldSlantedFont=lmromanslant10-bold,
+        SmallCapsFont=lmromancaps10-regular,
+        RawFeature={fallback=dutchs_fallbacks}
+      ]
+      \setsansfont{lmsans10-regular}[
+        BoldFont=lmsans10-bold,
+        ItalicFont=lmsans10-oblique,
+        BoldItalicFont=lmsans10-boldoblique,
+        RawFeature={fallback=dutchs_fallbacks}
+      ]
+    \fi
+  \fi
+
+%%fakesection END MAIN SETUP
+\fi
