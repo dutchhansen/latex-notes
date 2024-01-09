@@ -1,12 +1,3 @@
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% ██████╗░██╗░░░██╗████████╗░█████╗░██╗░░██╗░░░░░░░░░░██████╗████████╗██╗░░░██╗
-% ██╔══██╗██║░░░██║╚══██╔══╝██╔══██╗██║░░██║░░░░░░░░░██╔════╝╚══██╔══╝╚██╗░██╔╝
-% ██║░░██║██║░░░██║░░░██║░░░██║░░╚═╝███████║░░░░░░░░░╚█████╗░░░░██║░░░░╚████╔╝░
-% ██║░░██║██║░░░██║░░░██║░░░██║░░██╗██╔══██║░░░░░░░░░░╚═══██╗░░░██║░░░░░╚██╔╝░░
-% ██████╔╝╚██████╔╝░░░██║░░░╚█████╔╝██║░░██║░░░██╗░░░██████╔╝░░░██║░░░░░░██║░░░
-% ╚═════╝░░╚═════╝░░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═════╝░░░░╚═╝░░░░░░╚═╝░░░
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 %%Information
 % style file for LaTeX notetaking
 % original version written by @vEnhance [https://web.evanchen.cc/latex-style-guide.html].
@@ -113,7 +104,7 @@
     \ifdutchhref
       \usepackage[colorlinks=true,pdfusetitle]{hyperref}
       \hypersetup{pdfkeywords={dutch.sty}}
-      \hypersetup{urlcolor=RubineRed,linkcolor=RoyalBlue,citecolor=ForestGreen}
+      \hypersetup{urlcolor=RoyalBlue,linkcolor=RoyalBlue,citecolor=ForestGreen}
     \fi
     \usepackage[nameinlink]{cleveref}
   \fi
@@ -155,6 +146,23 @@
       headpunct={\\[3pt]},
       postheadspace={0pt}
     ]{thmbluebox}
+
+    \mdfdefinestyle{mdgreybox}{%
+      roundcorner=10pt,
+      linewidth=1pt,
+      skipabove=12pt,
+      innerbottommargin=9pt,
+      skipbelow=2pt,
+      linecolor=black,
+      nobreak=true,
+      backgroundcolor=RedViolet!5!gray!5,
+    }
+    \declaretheoremstyle[
+      headfont=\sffamily\bfseries,
+      mdframed={style=mdgreybox},
+      headpunct={\\[3pt]},
+      postheadspace={0pt}
+    ]{thmgreybox}
 
     \mdfdefinestyle{mdredbox}{%
       linewidth=0.5pt,
@@ -275,8 +283,8 @@
     \ifdutchmdthm
       \declaretheorem[style=thmgreenbox,name=Algorithm,sibling=theorem]{algorithm}
       \declaretheorem[style=thmgreenbox,name=Algorithm,numbered=no]{algorithm*}
-      \declaretheorem[style=thmgreenbox,name=Claim,sibling=theorem]{claim}
-      \declaretheorem[style=thmgreenbox,name=Claim,numbered=no]{claim*}
+      \declaretheorem[style=thmgreybox,name=Claim,sibling=theorem]{claim}
+      \declaretheorem[style=thmgreybox,name=Claim,numbered=no]{claim*}
     \else
       \declaretheorem[name=Algorithm,sibling=theorem]{algorithm}
       \declaretheorem[name=Algorithm,numbered=no]{algorithm*}
@@ -314,10 +322,12 @@
 
     \declaretheorem[style=basehead,name=Answer,sibling=theorem]{answer}
     \declaretheorem[style=basehead,name=Answer,numbered=no]{answer*}
-    \declaretheorem[style=basehead,name=Conjecture,sibling=theorem]{conjecture}
-    \declaretheorem[style=basehead,name=Conjecture,numbered=no]{conjecture*}
-    \declaretheorem[style=basehead,name=Definition,sibling=theorem]{definition}
-    \declaretheorem[style=basehead,name=Definition,numbered=no]{definition*}
+    \declaretheorem[style=thmgreybox,name=Conjecture,sibling=theorem]{conjecture}
+    \declaretheorem[style=thmgreybox,name=Conjecture,numbered=no]{conjecture*}
+    \declaretheorem[style=thmgreenbox,name=Definition,sibling=theorem]{definition}
+    \declaretheorem[style=thmgreenbox,name=Definition,numbered=no]{definition*}
+    \declaretheorem[style=thmblackbox,name=Observation,sibling=theorem]{observation}
+    \declaretheorem[style=thmblackbox,name=Observation,numbered=no]{observation*}
     \declaretheorem[style=basehead,name=Exercise,sibling=theorem]{exercise}
     \declaretheorem[style=basehead,name=Exercise,numbered=no]{exercise*}
     \declaretheorem[style=basehead,name=Fact,sibling=theorem]{fact}
